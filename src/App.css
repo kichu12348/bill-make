@@ -1,0 +1,411 @@
+:root {
+  --sidebar-width: 400px;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg-color: #f1f5f9;
+  --paper-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    "Open Sans",
+    "Helvetica Neue",
+    sans-serif;
+  background-color: var(--bg-color);
+  color: #1e293b;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* --- Editor Panel --- */
+.editor-panel {
+  width: var(--sidebar-width);
+  background: white;
+  padding: 2rem;
+  overflow-y: auto;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.editor-panel h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  color: #0f172a;
+}
+
+.editor-panel h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #334155;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+input {
+  padding: 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Items Editor */
+.items-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.item-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.5fr auto;
+  gap: 0.5rem;
+  align-items: start;
+}
+
+.remove-btn {
+  background: #fee2e2;
+  color: #ef4444;
+  border: none;
+  width: 36px;
+  height: 42px; /* Match input height roughly */
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  transition: background 0.2s;
+}
+
+.remove-btn:hover {
+  background: #fecaca;
+}
+
+.add-btn {
+  padding: 0.75rem;
+  background: white;
+  border: 2px dashed #cbd5e1;
+  color: #64748b;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.add-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  background: #eff6ff;
+}
+
+.download-btn {
+  margin-top: auto;
+  padding: 1rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+.download-btn:hover {
+  background: var(--primary-hover);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.download-btn,
+.share-btn {
+  flex: 1;
+}
+
+.share-btn {
+  padding: 1rem;
+  background: white;
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.share-btn:hover {
+  background: #eff6ff;
+}
+
+/* --- Preview Panel --- */
+.preview-panel {
+  flex: 1;
+  background: #cbd5e1; /* Darker grey to make paper pop */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem;
+  overflow: auto; /* Allow scrolling if paper is too long */
+}
+
+/* The Paper Bill */
+.paper-bill {
+  width: 210mm;
+  min-height: 297mm;
+  background: white;
+  padding: 2.5cm;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  color: #000;
+  flex-shrink: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: relative;
+}
+
+/* Bill Content Styling */
+.bill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 3rem;
+  border-bottom: 3px solid #000;
+  padding-bottom: 1.5rem;
+}
+
+.bill-header h2 {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.bill-meta {
+  text-align: right;
+}
+
+.bill-meta p {
+  margin: 0.25rem 0;
+  font-size: 1rem;
+}
+
+.bill-parties {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  padding: 0;
+}
+
+.party-col {
+  flex: 1;
+}
+
+.party-col:last-child {
+  text-align: right;
+}
+
+.party-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.party-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+  color: #0f172a;
+}
+
+.bill-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.bill-table th {
+  text-align: left;
+  padding: 1rem 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.bill-table th.text-right {
+  text-align: right;
+}
+
+.bill-table td {
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+
+.bill-table tr:last-child td {
+  border-bottom: none;
+}
+
+.bill-table th:first-child,
+.bill-table td:first-child {
+  padding-left: 0;
+}
+
+.bill-table th:last-child,
+.bill-table td:last-child {
+  padding-right: 0;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.total-label {
+  padding-top: 2rem;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.total-amount {
+  padding-top: 2rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  white-space: nowrap;
+}
+
+.bill-footer {
+  position: absolute;
+  bottom: 2.5cm;
+  left: 2.5cm;
+  right: 2.5cm;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #94a3b8;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+}
+
+/* Responsive Fixes */
+@media (max-width: 1100px) {
+  .preview-panel {
+    padding: 1.5rem;
+  }
+
+  /* Scale down the paper to fit in smaller viewports */
+  .paper-bill {
+    transform: scale(0.8);
+    transform-origin: top center;
+    margin-bottom: -20%; /* Compensate for empty space created by scale */
+  }
+}
+
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+    overflow-y: auto; /* Allow body scroll on mobile */
+  }
+
+  .editor-panel {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .preview-panel {
+    min-height: 100vh;
+    background: #475569;
+  }
+
+  .paper-bill {
+    transform: scale(0.6);
+    margin-bottom: -50%;
+  }
+
+  .item-row {
+    grid-template-columns: 1fr 80px 80px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .paper-bill {
+    transform: scale(0.4); /* Massive scale down for phones */
+    margin-bottom: -150%;
+    margin-left: -50px; /* Center brute force if needed */
+  }
+
+  .item-row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .remove-btn {
+    width: 100%;
+    height: 32px;
+  }
+}
