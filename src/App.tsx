@@ -93,7 +93,7 @@ function App() {
         const node = invoiceRef.current;
 
         const dataUrl = await domtoimage.toPng(node, {
-          quality: 2,
+          quality: 1,
           width: node.offsetWidth * scale,
           height: node.offsetHeight * scale,
           style: {
