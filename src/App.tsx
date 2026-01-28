@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { toPng } from "html-to-image";
+import domtoimage from "dom-to-image-more";
 import LZString from "lz-string"; // Import lz-string
 import "./App.css";
 
@@ -89,10 +89,18 @@ function App() {
   const handleDownload = async () => {
     if (invoiceRef.current) {
       try {
-        const dataUrl = await toPng(invoiceRef.current, {
-          quality: 1.0,
-          pixelRatio: 2, // Higher resolution
-          backgroundColor: "#ffffff", // Match paper color
+        const scale = 3; // Higher scale = better quality
+        const node = invoiceRef.current;
+
+        const dataUrl = await domtoimage.toPng(node, {
+          quality: 1,
+          width: node.offsetWidth * scale,
+          height: node.offsetHeight * scale,
+          style: {
+            transform: `scale(${scale})`,
+            transformOrigin: "top left",
+          },
+          bgcolor: "#ffffff",
         });
 
         const link = document.createElement("a");
