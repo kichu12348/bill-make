@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import LZString from "lz-string"; // Import lz-string
 import "./App.css";
 
@@ -88,16 +88,20 @@ function App() {
 
   const handleDownload = async () => {
     if (invoiceRef.current) {
-      const canvas = await html2canvas(invoiceRef.current, {
-        scale: 2, // Higher resolution
-        backgroundColor: "#ffffff", // Match paper color
-      });
+      try {
+        const dataUrl = await toPng(invoiceRef.current, {
+          quality: 1.0,
+          pixelRatio: 2, // Higher resolution
+          backgroundColor: "#ffffff", // Match paper color
+        });
 
-      const image = canvas.toDataURL("image/png");
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = `invoice-${data.invoiceNumber}.png`;
-      link.click();
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = `invoice-${data.invoiceNumber}.png`;
+        link.click();
+      } catch (err) {
+        console.error("Failed to generate image", err);
+      }
     }
   };
 
