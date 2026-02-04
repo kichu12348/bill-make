@@ -8,12 +8,8 @@ async function prerender() {
   // Import the server build
   const { render } = await import("./dist/server/Test.js");
 
-  console.log("Rendering app to HTML...");
-
   // Generate the app HTML
   const appHtml = render();
-
-  console.log(appHtml);
 
   // Read the client HTML template
   const template = fs.readFileSync(
