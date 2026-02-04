@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import domtoimage from "dom-to-image-more";
+// import domtoimage from "dom-to-image-more";  <-- removed to fix SSR
 import LZString from "lz-string"; // Import lz-string
 import "./App.css";
 
@@ -89,6 +89,7 @@ function App() {
   const handleDownload = async () => {
     if (invoiceRef.current) {
       try {
+        const domtoimage = (await import("dom-to-image-more")).default;
         const scale = 3; // Higher scale = better quality
         const node = invoiceRef.current;
 
