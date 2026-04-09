@@ -614,7 +614,7 @@ function App() {
           <div className="editor-top">
             <div className="brand">
               <LuFileText size={28} className="brand-icon" />
-              <h1>BillForge</h1>
+              <h1>Bill Make</h1>
             </div>
           </div>
 
