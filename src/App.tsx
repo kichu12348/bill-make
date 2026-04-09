@@ -1,7 +1,14 @@
 import { useState, useRef, useEffect, type ChangeEvent } from "react";
 import LZString from "lz-string";
 import { LuBuilding2, LuFileText, LuPackage, LuPenLine } from "react-icons/lu";
-import { FiDownload, FiShare2, FiPlus, FiX, FiCheck, FiImage } from "react-icons/fi";
+import {
+  FiDownload,
+  FiShare2,
+  FiPlus,
+  FiX,
+  FiCheck,
+  FiImage,
+} from "react-icons/fi";
 import "./App.css";
 
 interface InvoiceItem {
@@ -230,7 +237,11 @@ function App() {
                 src={data.companyLogo}
                 alt="Logo"
                 className="logo-preview-img"
-                style={data.logoBlackAndWhite ? { filter: "grayscale(1)" } : undefined}
+                style={
+                  data.logoBlackAndWhite
+                    ? { filter: "grayscale(1)" }
+                    : undefined
+                }
               />
               <button
                 className="logo-remove-btn"
@@ -244,7 +255,12 @@ function App() {
               <label className="bw-toggle-label">Black & White</label>
               <button
                 className={`bw-toggle ${data.logoBlackAndWhite ? "active" : ""}`}
-                onClick={() => setData({ ...data, logoBlackAndWhite: !data.logoBlackAndWhite })}
+                onClick={() =>
+                  setData({
+                    ...data,
+                    logoBlackAndWhite: !data.logoBlackAndWhite,
+                  })
+                }
                 type="button"
                 aria-label="Toggle black and white logo"
               >
@@ -606,10 +622,22 @@ function App() {
           <nav className="editor-tabs">
             {(
               [
-                { key: "company", icon: <LuBuilding2 size={18} />, label: "Company" },
-                { key: "document", icon: <LuFileText size={18} />, label: "Details" },
+                {
+                  key: "company",
+                  icon: <LuBuilding2 size={18} />,
+                  label: "Company",
+                },
+                {
+                  key: "document",
+                  icon: <LuFileText size={18} />,
+                  label: "Details",
+                },
                 { key: "items", icon: <LuPackage size={18} />, label: "Items" },
-                { key: "footer", icon: <LuPenLine size={18} />, label: "Footer" },
+                {
+                  key: "footer",
+                  icon: <LuPenLine size={18} />,
+                  label: "Footer",
+                },
               ] as const
             ).map(({ key, icon, label }) => (
               <button
@@ -672,7 +700,11 @@ function App() {
                 src={data.companyLogo}
                 alt="Company Logo"
                 className="paper-logo"
-                style={data.logoBlackAndWhite ? { filter: "grayscale(1)" } : undefined}
+                style={
+                  data.logoBlackAndWhite
+                    ? { filter: "grayscale(1)" }
+                    : undefined
+                }
               />
             )}
             <h2 className="paper-company-name">{data.companyName}</h2>
