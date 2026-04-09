@@ -52,6 +52,17 @@
   padding: 0;
 }
 
+/* Kill native number spinners globally */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 body {
   font-family:
     "Inter",
@@ -545,6 +556,81 @@ body {
   background: rgba(99, 102, 241, 0.05);
 }
 
+/* ─── Custom Number Stepper ─── */
+.custom-stepper {
+  display: flex;
+  align-items: center;
+  background: var(--bg-input);
+  border: 1px solid var(--border-input);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s var(--ease);
+  height: 38px;
+}
+.custom-stepper:focus-within {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.stepper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: all 0.15s var(--ease);
+  flex-shrink: 0;
+  user-select: none;
+}
+.stepper-btn:hover {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--text-accent);
+}
+.stepper-btn:active {
+  background: rgba(99, 102, 241, 0.2);
+}
+.stepper-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  background: transparent !important;
+  color: var(--text-muted) !important;
+}
+
+.stepper-value {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-align: center;
+  padding: 0 4px;
+  outline: none;
+}
+.stepper-value::placeholder {
+  color: var(--text-muted);
+}
+
+/* Variant: stepper with unit suffix */
+.stepper-suffix {
+  padding-right: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  pointer-events: none;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 /* ─── GST Section ─── */
 .gst-section {
   display: flex;
@@ -563,38 +649,6 @@ body {
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-secondary);
-}
-
-.gst-input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.gst-input {
-  width: 80px;
-  background: var(--bg-input);
-  border: 1px solid var(--border-input);
-  color: var(--text-primary);
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  font-family: inherit;
-  text-align: right;
-}
-.gst-input:focus {
-  outline: none;
-  border-color: var(--border-focus);
-}
-
-.gst-symbol {
-  position: absolute;
-  right: 10px;
-  color: var(--text-muted);
-  font-weight: 700;
-  font-size: 0.85rem;
-  pointer-events: none;
 }
 
 .gst-quick-btns {

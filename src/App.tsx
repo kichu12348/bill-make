@@ -454,15 +454,48 @@ function App() {
               </div>
               <div className="field-group">
                 <label>Qty / Pax</label>
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) =>
-                    updateItem(item.id, "quantity", Number(e.target.value))
-                  }
-                  placeholder="1"
-                  min="1"
-                />
+                <div className="custom-stepper">
+                  <button
+                    type="button"
+                    className="stepper-btn"
+                    onClick={() =>
+                      updateItem(
+                        item.id,
+                        "quantity",
+                        Math.max(1, item.quantity - 1),
+                      )
+                    }
+                    disabled={item.quantity <= 1}
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    className="stepper-value"
+                    value={item.quantity}
+                    style={{
+                      border: "none",
+                      boxShadow: "none",
+                    }}
+                    onChange={(e) =>
+                      updateItem(
+                        item.id,
+                        "quantity",
+                        Math.max(1, Number(e.target.value)),
+                      )
+                    }
+                    min="1"
+                  />
+                  <button
+                    type="button"
+                    className="stepper-btn"
+                    onClick={() =>
+                      updateItem(item.id, "quantity", item.quantity + 1)
+                    }
+                  >
+                    +
+                  </button>
+                </div>
               </div>
               <div className="field-group">
                 <label>Total</label>
@@ -485,9 +518,23 @@ function App() {
         <h4 className="section-subtitle">Tax / GST</h4>
         <div className="gst-input-row">
           <label>GST Percentage</label>
-          <div className="gst-input-wrapper">
+          <div className="custom-stepper" style={{ width: 140 }}>
+            <button
+              type="button"
+              className="stepper-btn"
+              onClick={() =>
+                setData({
+                  ...data,
+                  gstPercentage: Math.max(0, data.gstPercentage - 0.5),
+                })
+              }
+              disabled={data.gstPercentage <= 0}
+            >
+              −
+            </button>
             <input
               type="number"
+              className="stepper-value"
               value={data.gstPercentage}
               onChange={(e) =>
                 setData({
@@ -498,9 +545,21 @@ function App() {
               min="0"
               max="100"
               step="0.5"
-              className="gst-input"
             />
-            <span className="gst-symbol">%</span>
+            <span className="stepper-suffix">%</span>
+            <button
+              type="button"
+              className="stepper-btn"
+              onClick={() =>
+                setData({
+                  ...data,
+                  gstPercentage: Math.min(100, data.gstPercentage + 0.5),
+                })
+              }
+              disabled={data.gstPercentage >= 100}
+            >
+              +
+            </button>
           </div>
         </div>
         <div className="gst-quick-btns">
