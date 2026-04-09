@@ -651,6 +651,14 @@ body {
   color: var(--text-secondary);
 }
 
+.gst-visible-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--accent-from);
+  color: var(--text-primary);
+}
+
 .gst-quick-btns {
   display: flex;
   gap: 6px;

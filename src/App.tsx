@@ -37,12 +37,14 @@ interface InvoiceData {
   // Bill To
   billToName: string;
   billToAddress: string;
+  billToGSTIN: string;
 
   // Items
   items: InvoiceItem[];
 
   // GST
   gstPercentage: number;
+  sgstPercentage: number;
 
   // Footer
   paymentTerms: string[];
@@ -66,10 +68,12 @@ const DEFAULT_DATA: InvoiceData = {
 
   billToName: "Client Name",
   billToAddress: "Client Address Line 1\nClient Address Line 2",
+  billToGSTIN: "",
 
   items: [{ id: "1", description: "Item 1", quantity: 1, unitPrice: 100 }],
 
   gstPercentage: 0,
+  sgstPercentage: 0,
 
   paymentTerms: [
     "50% advance to confirm booking.",
@@ -90,6 +94,8 @@ function App() {
   const [toastMessage, setToastMessage] = useState("");
   const [showToast, setShowToast] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
+  const [isGstVisible, setIsGstVisible] = useState(true);
+  const [isSgstVisible, setIsSgstVisible] = useState(true);
 
   const invoiceRef = useRef<HTMLDivElement>(null);
 
@@ -179,7 +185,8 @@ function App() {
     0,
   );
   const gstAmount = (subtotal * data.gstPercentage) / 100;
-  const grandTotal = subtotal + gstAmount;
+  const sgstAmount = (subtotal * data.sgstPercentage) / 100;
+  const grandTotal = subtotal + gstAmount + sgstAmount;
 
   const formatCurrency = (n: number) => {
     return (
@@ -225,6 +232,15 @@ function App() {
     navigator.clipboard.writeText(url);
     toast("Share link copied to clipboard!");
   };
+
+  useEffect(() => {
+    if (!isGstVisible) {
+      setData({ ...data, gstPercentage: 0 });
+    }
+    if (!isSgstVisible) {
+      setData({ ...data, sgstPercentage: 0 });
+    }
+  }, [isGstVisible, isSgstVisible]);
 
   // ─── Editor Tabs ───
   const renderCompanyTab = () => (
@@ -410,6 +426,16 @@ function App() {
           placeholder="Full client address"
         />
       </div>
+
+      <div className="field-group">
+        <label>Client GSTIN / UIN</label>
+        <input
+          type="text"
+          value={data.billToGSTIN}
+          onChange={(e) => setData({ ...data, billToGSTIN: e.target.value })}
+          placeholder="e.g. 29ABCDE1234F1Z5"
+        />
+      </div>
     </div>
   );
 
@@ -516,8 +542,15 @@ function App() {
 
       <div className="gst-section">
         <h4 className="section-subtitle">Tax / GST</h4>
+
         <div className="gst-input-row">
-          <label>GST Percentage</label>
+          <label>GST Percentage :</label>
+          <input
+            className="gst-visible-checkbox"
+            type="checkbox"
+            checked={isGstVisible}
+            onChange={(e) => setIsGstVisible(e.target.checked)}
+          />
           <div className="custom-stepper" style={{ width: 140 }}>
             <button
               type="button"
@@ -575,6 +608,73 @@ function App() {
         </div>
       </div>
 
+      <div className="gst-section" style={{ marginTop: "16px" }}>
+        <h4 className="section-subtitle">Tax / SGST</h4>
+        <div className="gst-input-row">
+          <label>SGST Percentage :</label>
+          <input
+            className="gst-visible-checkbox"
+            type="checkbox"
+            checked={isSgstVisible}
+            onChange={(e) => setIsSgstVisible(e.target.checked)}
+          />
+          <div className="custom-stepper" style={{ width: 140 }}>
+            <button
+              type="button"
+              className="stepper-btn"
+              onClick={() =>
+                setData({
+                  ...data,
+                  sgstPercentage: Math.max(0, data.sgstPercentage - 0.5),
+                })
+              }
+              disabled={data.sgstPercentage <= 0}
+            >
+              −
+            </button>
+            <input
+              type="number"
+              className="stepper-value"
+              value={data.sgstPercentage}
+              onChange={(e) =>
+                setData({
+                  ...data,
+                  sgstPercentage: Math.max(0, Number(e.target.value)),
+                })
+              }
+              min="0"
+              max="100"
+              step="0.5"
+            />
+            <span className="stepper-suffix">%</span>
+            <button
+              type="button"
+              className="stepper-btn"
+              onClick={() =>
+                setData({
+                  ...data,
+                  sgstPercentage: Math.min(100, data.sgstPercentage + 0.5),
+                })
+              }
+              disabled={data.sgstPercentage >= 100}
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <div className="gst-quick-btns">
+          {[0, 5, 12, 18, 28].map((v) => (
+            <button
+              key={v}
+              className={`gst-quick-btn ${data.sgstPercentage === v ? "active" : ""}`}
+              onClick={() => setData({ ...data, sgstPercentage: v })}
+            >
+              {v}%
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="totals-summary">
         <div className="total-row">
           <span>Subtotal</span>
@@ -584,6 +684,12 @@ function App() {
           <div className="total-row gst-row">
             <span>GST ({data.gstPercentage}%)</span>
             <span>{formatCurrency(gstAmount)}</span>
+          </div>
+        )}
+        {data.sgstPercentage > 0 && (
+          <div className="total-row gst-row">
+            <span>SGST ({data.sgstPercentage}%)</span>
+            <span>{formatCurrency(sgstAmount)}</span>
           </div>
         )}
         <div className="total-row grand-total-row">
@@ -771,6 +877,11 @@ function App() {
             {data.companyPhone && (
               <p className="paper-company-phone">PH: {data.companyPhone}</p>
             )}
+            {data.companyGSTIN && (
+              <p className="paper-company-gstin">
+                GSTIN/UIN: {data.companyGSTIN}
+              </p>
+            )}
           </div>
 
           <hr className="paper-divider" />
@@ -781,8 +892,8 @@ function App() {
               <p className="paper-label">Bill To:</p>
               <p className="paper-bill-to-name">{data.billToName}</p>
               <p className="paper-bill-to-addr">{data.billToAddress}</p>
-              {data.companyGSTIN && (
-                <p className="paper-gstin">GSTIN/UIN: {data.companyGSTIN}</p>
+              {data.billToGSTIN && (
+                <p className="paper-gstin">GSTIN/UIN: {data.billToGSTIN}</p>
               )}
               {data.companyState && (
                 <p className="paper-state">
@@ -859,14 +970,26 @@ function App() {
                   <strong>₹ {subtotal.toLocaleString("en-IN")}/-</strong>
                 </td>
               </tr>
-              <tr className="gst-foot-row">
-                <td colSpan={4} className="text-right">
-                  <strong>Tax/GST ({data.gstPercentage}%)</strong>
-                </td>
-                <td className="text-right">
-                  <strong>₹ {gstAmount.toLocaleString("en-IN")}/-</strong>
-                </td>
-              </tr>
+              {isGstVisible && (
+                <tr className="gst-foot-row">
+                  <td colSpan={4} className="text-right">
+                    <strong>Tax/GST ({data.gstPercentage}%)</strong>
+                  </td>
+                  <td className="text-right">
+                    <strong>₹ {gstAmount.toLocaleString("en-IN")}/-</strong>
+                  </td>
+                </tr>
+              )}
+              {isSgstVisible && (
+                <tr className="gst-foot-row">
+                  <td colSpan={4} className="text-right">
+                    <strong>Tax/SGST ({data.sgstPercentage}%)</strong>
+                  </td>
+                  <td className="text-right">
+                    <strong>₹ {sgstAmount.toLocaleString("en-IN")}/-</strong>
+                  </td>
+                </tr>
+              )}
               <tr className="grand-total-foot-row">
                 <td colSpan={4} className="text-right">
                   <strong>Grand Total Amount:</strong>
