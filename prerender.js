@@ -13,7 +13,7 @@ async function prerender() {
 
   // Read the client HTML template
   const template = fs.readFileSync(
-    path.resolve(__dirname, "dist/index.html"),
+    path.resolve(__dirname, "dist/client/index.html"),
     "utf-8",
   );
 
@@ -24,7 +24,7 @@ async function prerender() {
   );
 
   // Write the final HTML
-  fs.writeFileSync(path.resolve(__dirname, "dist/index.html"), html);
+  fs.writeFileSync(path.resolve(__dirname, "dist/client/index.html"), html);
 
   console.log("✅ Pre-rendered HTML generated!");
 }
