@@ -802,19 +802,10 @@ function App() {
               </tr>
               <tr className="gst-foot-row">
                 <td colSpan={4} className="text-right">
-                  <strong>
-                    {data.gstPercentage > 0
-                      ? `Tax/GST (${data.gstPercentage}%)`
-                      : "[Tax/GST (If Applicable)]"}
-                    :
-                  </strong>
+                  <strong>`Tax/GST (${data.gstPercentage}%)`</strong>
                 </td>
                 <td className="text-right">
-                  <strong>
-                    {data.gstPercentage > 0
-                      ? `₹ ${gstAmount.toLocaleString("en-IN")}/-`
-                      : "—"}
-                  </strong>
+                  <strong>`₹ ${gstAmount.toLocaleString("en-IN")}/-`</strong>
                 </td>
               </tr>
               <tr className="grand-total-foot-row">
